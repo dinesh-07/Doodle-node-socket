@@ -1,0 +1,23 @@
+{
+  "name": "doodle-node-socket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dinesh-07/Doodle-node-socket.git"
+  },
+  "author": "Dinesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dinesh-07/Doodle-node-socket/issues"
+  },
+  "homepage": "https://github.com/dinesh-07/Doodle-node-socket#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
