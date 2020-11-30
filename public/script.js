@@ -62,4 +62,57 @@ drawline = (x0, y0, x1, y1, color, emit) => {
   context.lineWidth = 2;
   context.stroke();
   context.closePath();
+  if (!emit) {
+    return;
+  }
+  const width = canvas.width;
+  const height = canvas.height;
+
+  socket.emit("drawing", {
+    x0: x0 / width,
+    y0: y0 / height,
+    x1: x1 / width,
+    y1: y1 / height,
+    color,
+  });
 };
+
+// Throttle function
+function throttle(callback, delay) {
+  let previousCall = new Date().getTime();
+  return function () {
+    const time = new Date().getTime();
+    if (time - previousCall >= delay) {
+      previousCall = time;
+      callback.apply(null, arguments);
+    }
+  };
+}
+
+// Canvas mouse events listeners
+canvas.addEventListener("mousedown", mousedown, false);
+canvas.addEventListener("mouseup", mouseup, false);
+canvas.addEventListener("mousemove", throttle(mousemove, 10), false);
+canvas.addEventListener("mouseout", mouseup, false);
+
+// Mobile event
+canvas.addEventListener("touchstart", mousedown, false);
+canvas.addEventListener("touchend", mouseup, false);
+canvas.addEventListener("touchmove", throttle(mousemove, 10), false);
+canvas.addEventListener("touchcancel", mouseup, false);
+
+function onResize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", onResize, false);
+onResize();
+
+socket.on("drawing", onDrawingEvent);
+
+function onDrawingEvent(data) {
+  const w = canvas.width;
+  const h = canvas.height;
+  drawline(data.x0 * w, data.y0 * h, data.x1 * w, data.y1, data.color);
+}
